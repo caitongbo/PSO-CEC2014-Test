@@ -8,8 +8,8 @@
 #include<time.h>
 #include <boost/random.hpp>
 
-#define c1 1.49445 //加速度因子一般是根据大量实验所得
-#define c2 1.49445
+#define c1 2 //加速度因子一般是根据大量实验所得
+#define c2 2
 #define maxgen 500  // 迭代次数
 #define sizepop 50 // 种群规模
 #define popmax 100 // 个体最大取值
@@ -49,6 +49,20 @@ double func(double* arr)
 
     return fitness;
 
+}
+
+//(0,1)随机数产生函数  
+double randval_x()
+{
+    double val;
+
+    boost::mt19937 generator(time(0) * rand());
+    boost::uniform_real<> uniform_real_generate_x(0, 1);
+    boost::variate_generator< boost::mt19937&, boost::uniform_real<> > random_real_num_x(generator, uniform_real_generate_x);
+
+    val = random_real_num_x();
+
+    return(val);
 }
 
 //种群随机数产生函数  
@@ -154,8 +168,8 @@ void PSO_func(void)
             for (int k = 0;k < dim;k++)
             {
                 // 速度更新
-                double rand1 = (double)rand() / RAND_MAX; //0到1之间的随机数
-                double rand2 = (double)rand() / RAND_MAX;
+                double rand1 = randval_x(); //0到1之间的随机数
+                double rand2 = randval_x(); //0到1之间的随机数
                 V[j][k] = V[j][k] + c1 * rand1 * (pbest[j][k] - pop[j][k]) + c2 * rand2 * (gbest[k] - pop[j][k]);
                 if (V[j][k] > Vmax)
                     V[j][k] = Vmax;
